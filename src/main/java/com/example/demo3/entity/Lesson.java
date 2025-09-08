@@ -1,14 +1,11 @@
 package com.example.demo3.entity;
 
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
 import lombok.*;
-
 import java.util.List;
 
-
 @Entity
-@Table(name = "LESSONS")
+@Table(name = "lessons")
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,10 +14,7 @@ public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
     private Long id;
-
-    @Column(name = "Name")
     private String name;
 
     @ManyToMany(mappedBy = "lessons")

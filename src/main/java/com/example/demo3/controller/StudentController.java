@@ -1,9 +1,7 @@
 package com.example.demo3.controller;
 
-
 import com.example.demo3.dto.StudentRequest;
 import com.example.demo3.dto.StudentResponse;
-import com.example.demo3.entity.Student;
 import com.example.demo3.exception.EntityNotFoundException;
 import com.example.demo3.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/api/students")
 @RequiredArgsConstructor
 public class StudentController {
 
@@ -34,9 +31,8 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/id")
-    public ResponseEntity<StudentResponse> getStudentById(@RequestParam Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentResponse> getStudentById(@PathVariable Long id) {
         try {
             StudentResponse student = studentService.getStudentById(id);
             return ResponseEntity.ok(student);
@@ -46,7 +42,6 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @PostMapping
     public ResponseEntity<Void> createStudent(@RequestBody StudentRequest request){
         try {
@@ -56,6 +51,4 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }

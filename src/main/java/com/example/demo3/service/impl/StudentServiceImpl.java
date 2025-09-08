@@ -20,8 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
@@ -29,13 +27,42 @@ public class StudentServiceImpl implements StudentService {
     @PersistenceContext
     private EntityManager em;
 
+    private final StudentMapper studentMapper;
     private final StudentRepository studentRepository;
+    private Predicate predicate;
 
     @Override
     public List<StudentResponse> getStudents(String firstName, String lastName, Integer age) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Student> cq = cb.createQuery(Student.class);
         Root<Student> root = cq.from(Student.class);
+
+        cq.select(root).where(getPredicate(cb, root, firstName, lastName, age));
+
+        List<Student> students = em.createQuery(cq).getResultList();
+        return students.stream()
+                .map(studentMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public StudentResponse getStudentById(Long id) {
+        return studentRepository.findById(id)
+                .map(studentMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Student not found"));
+    }
+
+    @Override
+    public void createStudent(StudentRequest request) {
+        Student student = studentMapper.toEntity(request);
+        studentRepository.save(student);
+    }
+
+    private Predicate getPredicate(CriteriaBuilder cb,
+                                   Root<Student> root,
+                                   String firstName,
+                                   String lastName,
+                                   Integer age) {
 
         List<Predicate> predicates = new ArrayList<>();
         if (firstName != null && !firstName.isBlank()) {
@@ -47,31 +74,8 @@ public class StudentServiceImpl implements StudentService {
         if (age != null) {
             predicates.add(cb.equal(root.get("age"), age));
         }
-
-        cq.select(root).where(predicates.toArray(new Predicate[0]));
-
-        List<Student> students = em.createQuery(cq).getResultList();
-        return students.stream()
-                .map(student->StudentMapper.INSTANCE.toDto(student))
-                .toList();
+        return predicates.isEmpty() ? cb.conjunction() : cb.and(predicates.toArray(new Predicate[0]));
     }
-
-    @Override
-    public StudentResponse getStudentById(Long id) {
-        return studentRepository.findById(id)
-                .map(student -> StudentMapper.INSTANCE.toDto(student))
-                .orElseThrow(() -> new EntityNotFoundException("Student not found"));
-    }
-
-    @Override
-    public void createStudent(StudentRequest request) {
-        Student student = new Student();
-        student.setFirstName(request.getFirstName());
-        student.setLastName(request.getLastName());
-        student.setAge(request.getAge());
-        studentRepository.save(student);
-    }
-
 
 }
 
