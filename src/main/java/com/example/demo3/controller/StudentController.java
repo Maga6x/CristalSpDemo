@@ -1,16 +1,15 @@
 package com.example.demo3.controller;
 
 
+import com.example.demo3.dto.StudentRequest;
 import com.example.demo3.dto.StudentResponse;
 import com.example.demo3.entity.Student;
+import com.example.demo3.exception.EntityNotFoundException;
 import com.example.demo3.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,29 @@ public class StudentController {
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
+
+    @GetMapping("/id")
+    public ResponseEntity<StudentResponse> getStudentById(@RequestParam Long id) {
+        try {
+            StudentResponse student = studentService.getStudentById(id);
+            return ResponseEntity.ok(student);
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createStudent(@RequestBody StudentRequest request){
+        try {
+            studentService.createStudent(request);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

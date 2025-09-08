@@ -6,11 +6,11 @@ import lombok.*;
 
 import java.util.List;
 
-@Enabled
+
 @Entity
 @Table(name = "LESSONS")
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Lesson {

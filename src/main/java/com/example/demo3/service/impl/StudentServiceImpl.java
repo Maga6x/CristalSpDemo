@@ -1,8 +1,10 @@
 package com.example.demo3.service.impl;
 
 
+import com.example.demo3.dto.StudentRequest;
 import com.example.demo3.dto.StudentResponse;
 import com.example.demo3.entity.Student;
+import com.example.demo3.exception.EntityNotFoundException;
 import com.example.demo3.mapper.StudentMapper;
 import com.example.demo3.repository.StudentRepository;
 import com.example.demo3.service.StudentService;
@@ -53,6 +55,23 @@ public class StudentServiceImpl implements StudentService {
                 .map(student->StudentMapper.INSTANCE.toDto(student))
                 .toList();
     }
+
+    @Override
+    public StudentResponse getStudentById(Long id) {
+        return studentRepository.findById(id)
+                .map(student -> StudentMapper.INSTANCE.toDto(student))
+                .orElseThrow(() -> new EntityNotFoundException("Student not found"));
+    }
+
+    @Override
+    public void createStudent(StudentRequest request) {
+        Student student = new Student();
+        student.setFirstName(request.getFirstName());
+        student.setLastName(request.getLastName());
+        student.setAge(request.getAge());
+        studentRepository.save(student);
+    }
+
 
 }
 
