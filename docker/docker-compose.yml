@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: demo3
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "55432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./pgdb:/docker-entrypoint-initdb.d:ro   # опционально, если есть скрипты инициализации
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d demo3"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: "/home/user/Рабочий стол/project/Huh/demo3"
+      dockerfile: Dockerfile
+    image: demo3:local
+    container_name: back
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/demo3
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+      SERVER_PORT: 8080
+    ports:
+      - "8088:8080"
+    restart: unless-stopped
+
+volumes:
+  pg_data:
+
