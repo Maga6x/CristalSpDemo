@@ -13,15 +13,12 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class StudentResponse {
 
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private Integer age;
-    private List<Lesson> lessons;
-}
+@Builder
+public record StudentResponse (
+        Long id,
+        String firstName,
+        String lastName,
+        Integer age,
+        List<Lesson> lessons
+){}

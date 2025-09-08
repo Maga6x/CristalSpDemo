@@ -11,12 +11,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class LessonResponse {
-
-    private String name;
-    private List<StudentResponse> students;
-}
+public record LessonResponse
+        (
+        String name,
+        List<StudentResponse> students
+        ){}

@@ -1,17 +1,21 @@
 package com.example.demo3.mapper;
 
+import com.example.demo3.dto.StudentRequest;
 import com.example.demo3.dto.StudentResponse;
 import com.example.demo3.entity.Student;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper(builder = @Builder(disableBuilder = true))
+
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface StudentMapper {
-
-    StudentMapper INSTANCE = Mappers.getMapper(StudentMapper.class);
 
     StudentResponse toDto(Student student);
 
-    Student toEntity(StudentResponse studentResponse);
+    @Mapping(target = "id", ignore = true)
+    Student toEntity(StudentRequest request);
 }

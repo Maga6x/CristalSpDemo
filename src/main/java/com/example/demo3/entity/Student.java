@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "STUDENTS")
+@Table(name = "students")
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,7 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "first_name")
