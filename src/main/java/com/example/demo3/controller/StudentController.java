@@ -43,7 +43,7 @@ public class StudentController {
         }
     }
     @PostMapping
-    public ResponseEntity<Void> createStudent(@RequestBody StudentRequest request){
+    public ResponseEntity<?> createStudent(@RequestBody StudentRequest request){
         try {
             studentService.createStudent(request);
             return ResponseEntity.ok().build();

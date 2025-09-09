@@ -7,3 +7,4 @@ spring:
     hibernate: none
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
+
