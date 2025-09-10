@@ -17,6 +17,7 @@ ON CONFLICT (username) DO NOTHING;
 INSERT INTO user_roles(user_id, role_id)
 VALUES (1,1),
        (2,2);
+
 -- changeset alisher:3
 INSERT INTO user_roles (user_id, role_id)
 SELECT u.id, r.id
