@@ -1,7 +1,6 @@
 package com.example.demo3.service.impl;
 
 
-import com.example.demo3.entity.Admin;
 import com.example.demo3.entity.User;
 import com.example.demo3.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
