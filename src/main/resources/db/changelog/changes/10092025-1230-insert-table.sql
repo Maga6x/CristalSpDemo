@@ -12,6 +12,11 @@ VALUES('maga',   '$2a$10$jXH8/ecxGeRTHQx21OHwV.XcKm9b3HopSmNwqmdFWi6tBPXuMo46K',
       ('darhan', '$2a$10$jXH8/ecxGeRTHQx21OHwV.XcKm9b3HopSmNwqmdFWi6tBPXuMo46K', 'darhan', 20, 'male')
 ON CONFLICT (username) DO NOTHING;
 
+
+-- changeset alisher:4
+INSERT INTO user_roles(user_id, role_id)
+VALUES (1,1),
+       (2,2);
 -- changeset alisher:3
 INSERT INTO user_roles (user_id, role_id)
 SELECT u.id, r.id
@@ -25,3 +30,4 @@ SELECT u.id, r.id
 FROM users u JOIN roles r ON r.name = 'ADMIN'
 WHERE u.username = 'darhan'
 ON CONFLICT DO NOTHING;
+
