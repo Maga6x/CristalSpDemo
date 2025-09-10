@@ -35,8 +35,16 @@ public class RegistrationController {
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<Void> registerAdmin() {
-        // TODO: реализовать логику регистарции админов
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> registerAdmin(@RequestBody UserRegisterRequest request) {
+        try {
+            registrationService.registerUser(request);
+            return ResponseEntity.ok().build();
+        }catch (UsernameAlreadyExistException | IncorrectRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 }

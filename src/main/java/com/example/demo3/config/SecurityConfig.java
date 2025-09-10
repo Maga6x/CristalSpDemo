@@ -45,12 +45,12 @@ public class SecurityConfig {
                 .authenticationManager(authenticationManager(http))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/students").hasRole("USER")
-                        .requestMatchers("/registration/user").anonymous()
+                        .requestMatchers("/registration/user").hasRole("ADMIN")
                         .requestMatchers("/registration/admin").hasRole("ADMIN")
                         .requestMatchers("/swagger-ui/**", "/authenticate", "/refresh-token").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterAt(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint) // Обработка ошибок аутентификации
                 )
